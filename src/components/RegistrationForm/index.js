@@ -7,6 +7,7 @@ class RegistrationForm extends Component {
     lastname: '',
     fnameErrorMsg: '',
     lnameErrorMsg: '',
+    isSuccess: false,
   }
 
   renderSuccessPage = () => (
@@ -22,7 +23,7 @@ class RegistrationForm extends Component {
   )
 
   onSubmitSuccess = () => {
-    this.renderSuccessPage()
+    this.setState({isSuccess: true})
   }
 
   onSubmit = event => {
@@ -30,7 +31,9 @@ class RegistrationForm extends Component {
 
     const {firstname, lastname} = this.state
 
-    if (firstname === '') {
+    if (firstname === '' && lastname === '') {
+      this.setState({fnameErrorMsg: 'Required', lnameErrorMsg: 'Required'})
+    } else if (firstname === '') {
       this.setState({fnameErrorMsg: 'Required'})
     } else if (lastname === '') {
       this.setState({lnameErrorMsg: 'Required'})
@@ -61,12 +64,11 @@ class RegistrationForm extends Component {
     }
   }
 
-  render() {
+  renderRegistrationPage = () => {
     const {firstname, lastname, fnameErrorMsg, lnameErrorMsg} = this.state
-
+    console.log('In renderRegistrationPage')
     return (
-      <div className="app-container">
-        <h1 className="main-heading">Registration</h1>
+      <div className="registration-page">
         <form className="form-container" onSubmit={this.onSubmit}>
           <label htmlFor="firstname" className="input-title">
             FIRST NAME
@@ -103,6 +105,18 @@ class RegistrationForm extends Component {
             Submit
           </button>
         </form>
+      </div>
+    )
+  }
+
+  render() {
+    const {isSuccess} = this.state
+    console.log('In render')
+    return (
+      <div className="app-container">
+        <h1 className="main-heading">Registration</h1>
+        {this.renderRegistrationPage}
+        {isSuccess ? this.renderSuccessPage : ''}
       </div>
     )
   }
